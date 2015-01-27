@@ -38,10 +38,10 @@ TBrush ExtrudeBrushFromFace(const std::vector<TVector3d>& _krFace)
 		Brush.m_Faces[i].push_back(i % (Brush.m_Faces.size()-1));
 	}
 
-	//for(std::vector<size_t>& rFace : Brush.m_Faces)
-	//{
-	//	std::reverse(rFace.begin(), rFace.end());
-	//}
+	for(std::vector<size_t>& rFace : Brush.m_Faces)
+	{
+		std::reverse(rFace.begin(), rFace.end());
+	}
 
 	return(Brush);
 }

@@ -19,7 +19,7 @@ std::string StringFromBrush(const TBrush& _krBrush)
 	ssOut << std::fixed;
 	for(const TVector3d& krVertex : _krBrush.m_Positions)
 	{
-		ssOut << "\t\t" << krVertex.m_dX << " " << krVertex.m_dY << " " << krVertex.m_dZ << std::endl;
+		ssOut << "\t\t" << krVertex.m_dX << " " << krVertex.m_dY << " " << -krVertex.m_dZ << std::endl;
 	}
 	ssOut << "\tfaces" << std::endl;
 	for(const std::vector<size_t>& krFace : _krBrush.m_Faces)
