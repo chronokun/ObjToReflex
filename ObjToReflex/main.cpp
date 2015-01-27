@@ -22,12 +22,17 @@ std::string StringFromBrush(const TBrush& _krBrush)
 		ssOut << "\t\t" << krVertex.m_dX << " " << krVertex.m_dY << " " << -krVertex.m_dZ << std::endl;
 	}
 	ssOut << "\tfaces" << std::endl;
-	for(const std::vector<size_t>& krFace : _krBrush.m_Faces)
+	for(size_t i = 0; i < _krBrush.m_Faces.size(); ++i)
 	{
+		const std::vector<size_t>& krFace = _krBrush.m_Faces[i];
 		ssOut << "\t\t" << 0.0f << " " << 0.0f << " " << 1.0f << " " << 1.0f << " " << 0.0f;
 		for(const size_t kIndex : krFace)
 		{
 			ssOut << " " << kIndex;
+		}
+		if(i)
+		{
+			ssOut << " " << "internal/editor/textures/editor_nolight";
 		}
 		ssOut << std::endl;
 	}
