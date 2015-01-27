@@ -55,11 +55,14 @@ int main(const int _kiArgC, const char** _kppcArgv)
 	}
 
 	std::vector<TBrush> Brushes;
-	for(size_t i = 0; i < s_ObjLoader.GetFaceCount(0); ++i)
+	for(size_t i = 0; i < s_ObjLoader.GetMeshCount(); ++i)
 	{
-		std::vector<TVector3d> Face;
-		s_ObjLoader.GetFace(Face, 0, i);
-		Brushes.push_back(ExtrudeBrushFromFace(Face));
+		for(size_t j = 0; j < s_ObjLoader.GetFaceCount(i); ++j)
+		{
+			std::vector<TVector3d> Face;
+			s_ObjLoader.GetFace(Face, i, j);
+			Brushes.push_back(ExtrudeBrushFromFace(Face));
+		}
 	}
 
 	std::ofstream OutFile;
