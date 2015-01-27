@@ -35,9 +35,15 @@ std::string StringFromBrush(const TBrush& _krBrush)
 	return(ssOut.str());
 }
 
-int main()
+int main(const int _kiArgC, const char** _kppcArgv)
 {
-	const bool kbLoaded = s_ObjLoader.LoadFile("monkey.obj");
+	// Check we have correct number of parameters
+	if(_kiArgC < 3)
+	{
+		return(3);
+	}
+
+	const bool kbLoaded = s_ObjLoader.LoadFile(_kppcArgv[1]);
 	if(!kbLoaded)
 	{
 		return(2);
@@ -52,7 +58,7 @@ int main()
 	}
 
 	std::ofstream OutFile;
-	OutFile.open("output.map");
+	OutFile.open(_kppcArgv[2]);
 	if(OutFile.is_open())
 	{
 		OutFile << "reflex map version 6\n"
