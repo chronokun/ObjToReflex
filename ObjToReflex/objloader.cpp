@@ -39,39 +39,48 @@ const bool CObjLoader::LoadFile(const char* _kpcFilename)
 
 	for(const std::vector<std::string>& krLine : Tokens)
 	{
-		if(krLine[0].compare("o") == 0)
+		if(krLine.size())
 		{
-			this->m_Meshes.push_back(TMesh());
-			this->m_Meshes[this->m_Meshes.size()-1].m_MeshName = krLine[1];
-		}
-		else if(krLine[0].compare("v") == 0)
-		{
-			this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.push_back(TVector3d());
-			this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions[this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.size()-1]
-				= TVector3d{std::stod(krLine[1]), std::stod(krLine[2]), std::stod(krLine[3])};
-		}
-		else if(krLine[0].compare("vn") == 0)
-		{
-			bNormals = true;
-		}
-		else if(krLine[0].compare("vt") == 0)
-		{
-			bTexCoords = true;
-		}
-		else if(krLine[0].compare("f") == 0)
-		{
-			this->m_Meshes[this->m_Meshes.size()-1].m_Faces.push_back(std::vector<size_t>());
-			for(size_t i = 1; i < krLine.size(); ++i)
+			if(krLine[0].compare("o") == 0)
 			{
-				this->m_Meshes[this->m_Meshes.size()-1].m_Faces[this->m_Meshes[this->m_Meshes.size()-1].m_Faces.size()-1].push_back(std::stol(krLine[i]));
-
-				if(bTexCoords)
+				this->m_Meshes.push_back(TMesh());
+				this->m_Meshes[this->m_Meshes.size()-1].m_MeshName = krLine[1];
+			}
+			else if(krLine[0].compare("v") == 0)
+			{
+				if(this->m_Meshes.size())
 				{
-					i++;
+					this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.push_back(TVector3d());
+					this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions[this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.size()-1]
+						= TVector3d{std::stod(krLine[1]), std::stod(krLine[2]), std::stod(krLine[3])};
 				}
-				if(bNormals)
+			}
+			else if(krLine[0].compare("vn") == 0)
+			{
+				bNormals = true;
+			}
+			else if(krLine[0].compare("vt") == 0)
+			{
+				bTexCoords = true;
+			}
+			else if(krLine[0].compare("f") == 0)
+			{
+				if(this->m_Meshes.size())
 				{
-					i++;
+					this->m_Meshes[this->m_Meshes.size()-1].m_Faces.push_back(std::vector<size_t>());
+					for(size_t i = 1; i < krLine.size(); ++i)
+					{
+						this->m_Meshes[this->m_Meshes.size()-1].m_Faces[this->m_Meshes[this->m_Meshes.size()-1].m_Faces.size()-1].push_back(std::stol(krLine[i]));
+
+						if(bTexCoords)
+						{
+							i++;
+						}
+						if(bNormals)
+						{
+							i++;
+						}
+					}
 				}
 			}
 		}
