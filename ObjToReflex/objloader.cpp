@@ -48,12 +48,13 @@ const bool CObjLoader::LoadFile(const char* _kpcFilename)
 			}
 			else if(krLine[0].compare("v") == 0)
 			{
-				if(this->m_Meshes.size())
+				if(this->m_Meshes.size() == 0)
 				{
-					this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.push_back(TVector3d());
-					this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions[this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.size()-1]
-						= TVector3d{std::stod(krLine[1]), std::stod(krLine[2]), std::stod(krLine[3])};
+					this->m_Meshes.push_back(TMesh());
 				}
+				this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.push_back(TVector3d());
+				this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions[this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.size()-1]
+					= TVector3d{std::stod(krLine[1]), std::stod(krLine[2]), std::stod(krLine[3])};
 			}
 			else if(krLine[0].compare("vn") == 0)
 			{
@@ -65,21 +66,24 @@ const bool CObjLoader::LoadFile(const char* _kpcFilename)
 			}
 			else if(krLine[0].compare("f") == 0)
 			{
-				if(this->m_Meshes.size())
+				this->m_Meshes[this->m_Meshes.size()-1].m_Faces.push_back(std::vector<size_t>());
+				for(size_t i = 1; i < krLine.size(); ++i)
 				{
-					this->m_Meshes[this->m_Meshes.size()-1].m_Faces.push_back(std::vector<size_t>());
-					for(size_t i = 1; i < krLine.size(); ++i)
+					int index = std::stol(krLine[i]);
+					if(index < 0)
 					{
-						this->m_Meshes[this->m_Meshes.size()-1].m_Faces[this->m_Meshes[this->m_Meshes.size()-1].m_Faces.size()-1].push_back(std::stol(krLine[i]));
+						index = (this->m_Meshes[this->m_Meshes.size()-1].m_VertexPositions.size() + 1)+index;
+					}
 
-						if(bTexCoords)
-						{
-							i++;
-						}
-						if(bNormals)
-						{
-							i++;
-						}
+					this->m_Meshes[this->m_Meshes.size()-1].m_Faces[this->m_Meshes[this->m_Meshes.size()-1].m_Faces.size()-1].push_back(index);
+
+					if(bTexCoords)
+					{
+						i++;
+					}
+					if(bNormals)
+					{
+						i++;
 					}
 				}
 			}
